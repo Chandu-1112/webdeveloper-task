@@ -1,0 +1,25 @@
+{
+  "id": "/",
+  "name": "opportunityhub",
+  "short_name": "opportunityhub",
+  "description": "Discover internships, scholarships, hackathons, workshops, and competitions.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f7f8f4",
+  "theme_color": "#102b3f",
+  "icons": [
+    {
+      "src": "/doubleustudentecosystem.jpeg",
+      "sizes": "192x192",
+      "type": "image/jpeg",
+      "purpose": "any"
+    },
+    {
+      "src": "/doubleustudentecosystem.jpeg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ]
+}
