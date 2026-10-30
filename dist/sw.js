@@ -1,5 +1,5 @@
-const CACHE_NAME = 'opportunityhub-v2'
-const APP_FILES = ['/', '/manifest.webmanifest', '/doubleustudentecosystem.jpeg']
+const CACHE_NAME = 'opportunityhub-v3'
+const APP_FILES = ['/', '/manifest.webmanifest', '/doubleustudentecosystem.jpeg', '/app-icon-192.png', '/app-icon-512.png']
 
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(APP_FILES)))

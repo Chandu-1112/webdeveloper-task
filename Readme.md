@@ -4,6 +4,10 @@ OpportunityHub is a web application that helps college students discover differe
 
 The goal is to make finding useful career and learning opportunities easier for students.
 
+## Project Link
+
+- **Live Demo:** https://webdeveloper-task-zuwr.onrender.com
+
 ## Features
 
 - View different opportunities with their details.
@@ -13,6 +17,7 @@ The goal is to make finding useful career and learning opportunities easier for 
 - Bookmark opportunities and access them later.
 - Save bookmarks using browser LocalStorage.
 - Responsive design for mobile and desktop.
+- Installable as a web app on supported browsers.
 
 ## Tech Stack
 
@@ -29,13 +34,13 @@ Follow these steps to run the project locally.
 **1. Clone the repository**
 
 ```bash
-git clone <your-repository-url>
+git clone https://github.com/Chandu-1112/webdeveloper-task.git
 ```
 
 **2. Open the project folder**
 
 ```bash
-cd opportunity-hub
+cd webdeveloper-task
 ```
 
 **3. Install dependencies**
@@ -92,18 +97,13 @@ I fixed it by using `trim()` and `toLowerCase()` to normalize the search input b
 - No user login or registration.
 - Opportunities are stored as local sample data.
 - Bookmarks are saved in the browser's LocalStorage.
-- The Download App button requires a valid app download link to provide an actual download.
+- App installation is available through the browser on supported devices; no native APK is provided.
 
 ## AI Tools Used
 
 ChatGPT was used for understanding concepts and documentation.
 Github copilot for coding and debugging.
 
-## Project Links
-
-- **GitHub Repository:** Add your repository link here.
-- **Live Demo:** Add your deployed website link here.
-- **Screen Recording:** Add your demo recording link here if available.
 
 ## Further Improvements
 ->If we want to take it further we can include the following features:
