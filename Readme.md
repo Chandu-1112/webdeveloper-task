@@ -72,6 +72,8 @@ Open the local URL displayed in the terminal to view the application.
 
 The frontend uses the FastAPI backend for registration/login, community opportunity listings, and user-specific bookmarks. API-created listings are visible on the opportunity board and show the submitter's name. Bookmarks for both sample and community listings are stored in PostgreSQL. Existing browser-only sample bookmarks are imported to the signed-in account on first login.
 
+For deployment, the frontend can stay on Render while the API runs as a Vercel project with `backend/` as its root directory and Neon as its PostgreSQL database. Follow [backend/README.md](backend/README.md) for the Vercel and Neon setup.
+
 ## Project Structure
 
 ```text
