@@ -33,7 +33,15 @@ async function request<T>(path: string, options: RequestInit = {}, token?: strin
   if (options.body && !headers.has('Content-Type')) headers.set('Content-Type', 'application/json')
   if (token) headers.set('Authorization', `Bearer ${token}`)
 
-  const response = await fetch(`${API_BASE_URL}${path}`, { ...options, headers })
+  let response: Response
+  try {
+    response = await fetch(`${API_BASE_URL}${path}`, { ...options, headers })
+  } catch (error) {
+    if (error instanceof TypeError) {
+      throw new Error(`Unable to reach the API at ${API_BASE_URL}. Check VITE_API_URL on the frontend and CORS_ORIGINS on the backend.`)
+    }
+    throw error
+  }
   if (!response.ok) {
     const body: unknown = await response.json().catch(() => null)
     const detail = typeof body === 'object' && body !== null && 'detail' in body && typeof body.detail === 'string'
