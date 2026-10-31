@@ -6,7 +6,7 @@ export default function Footer() {
     <footer className="site-footer">
       <Link to="/" className="footer-brand"><Compass size={17} /> opportunity<span>hub</span></Link>
       <p>Made for the curious, the builders, and the almost-ready.</p>
-      <span className="footer-note">A student discovery demo · All listings are sample data</span>
+      <span className="footer-note">Demo opportunities and community listings · Verify community details</span>
     </footer>
   )
 }

@@ -17,4 +17,6 @@ export interface Opportunity {
   deadline: string
   skills?: string[]
   instructions: string
+  isDemo?: boolean
+  creatorName?: string
 }

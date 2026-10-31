@@ -1,4 +1,4 @@
-# OpportunityHub 🚀
+# OpportunityHub
 
 OpportunityHub is a web application that helps college students discover different opportunities in one place. Students can explore internships, hackathons, scholarships, workshops, and competitions.
 
@@ -14,8 +14,9 @@ The goal is to make finding useful career and learning opportunities easier for 
 - Search opportunities by title or organization name.
 - Filter opportunities by category.
 - View detailed information about each opportunity.
-- Bookmark opportunities and access them later.
-- Save bookmarks using browser LocalStorage.
+- Create an account and log in.
+- Save sample and community opportunities to your account database.
+- Publish opportunities with eligibility, location, deadline, skills, and application instructions.
 - Responsive design for mobile and desktop.
 - Installable as a web app on supported browsers.
 
@@ -25,7 +26,9 @@ The goal is to make finding useful career and learning opportunities easier for 
 - TypeScript (TSX)
 - Tailwind CSS
 - Vite
-- LocalStorage
+- FastAPI
+- PostgreSQL with SQLAlchemy
+- LocalStorage for the login token only
 
 ## Getting Started
 
@@ -49,13 +52,25 @@ cd webdeveloper-task
 npm install
 ```
 
-**4. Start the development server**
+**4. Configure the API URL**
+
+Copy `.env.example` to `.env` in the repository root. The default points to `http://localhost:8000`.
+
+**5. Start the backend**
+
+Follow [backend/README.md](backend/README.md) to create the PostgreSQL database and start FastAPI in its own terminal.
+
+**6. Start the frontend**
 
 ```bash
 npm run dev
 ```
 
 Open the local URL displayed in the terminal to view the application.
+
+## Backend API
+
+The frontend uses the FastAPI backend for registration/login, community opportunity listings, and user-specific bookmarks. API-created listings are visible on the opportunity board and show the submitter's name. Bookmarks for both sample and community listings are stored in PostgreSQL. Existing browser-only sample bookmarks are imported to the signed-in account on first login.
 
 ## Project Structure
 
@@ -66,9 +81,16 @@ src/
 ├── data/
 ├── types/
 ├── hooks/
+├── services/
 ├── App.tsx
 ├── main.tsx
 └── index.css
+
+backend/
+├── app/
+├── migrations/
+├── requirements.txt
+└── README.md
 
 public/
 package.json
@@ -83,7 +105,7 @@ The application currently uses sample opportunity listings for demonstration pur
 
 I chose React because it makes it easier to build reusable components and manage the application UI. TypeScript helps maintain proper data types, while Tailwind CSS makes responsive styling easier.
 
-LocalStorage is used to save bookmarked opportunities without requiring a backend.
+The backend validates passwords, stores password hashes rather than plaintext passwords, and authenticates protected requests with bearer tokens. The browser stores the access token locally, but never stores bookmarks. Community listings display the submitter's name and should be verified with the listed organization.
 
 ## Bug Fixed
 
@@ -93,10 +115,10 @@ I fixed it by using `trim()` and `toLowerCase()` to normalize the search input b
 
 ## Known Limitations
 
-- No backend or database integration.
-- No user login or registration.
-- Opportunities are stored as local sample data.
-- Bookmarks are saved in the browser's LocalStorage.
+- PostgreSQL and the FastAPI backend must be running for login, publishing, and account bookmarks.
+- The preloaded demo opportunities are fictional sample data.
+- Login, publishing, and bookmarks require a running PostgreSQL database and FastAPI backend.
+- Community-submitted opportunity details are not independently verified.
 - App installation is available through the browser on supported devices; no native APK is provided.
 
 ## AI Tools Used
@@ -106,12 +128,6 @@ Github copilot for coding and debugging.
 
 
 ## Further Improvements
-->If we want to take it further we can include the following features:
-- User authentication.
-- Backend and database integration.
-- Admin dashboard to manage opportunities.
-- Real-time opportunity updates.
-- Notifications for upcoming deadlines.
-- AI-based opportunity recommendations.
 
----
+- Add moderation and event ownership management.
+- Add deadline reminders and opportunity recommendations.

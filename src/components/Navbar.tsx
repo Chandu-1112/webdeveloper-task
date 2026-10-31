@@ -1,6 +1,11 @@
 import { useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
-import { Bookmark, Compass, House, Menu, X } from 'lucide-react'
+import { Bookmark, Compass, House, LogIn, LogOut, Menu, Plus, UserRound, X } from 'lucide-react'
+
+interface NavbarProps {
+  user: { email: string; fullName: string } | null
+  onLogout: () => void
+}
 
 const navItems = [
   { to: '/', label: 'Home', icon: House, end: true },
@@ -9,7 +14,7 @@ const navItems = [
   { to: '/about', label: 'About', icon: null, end: false },
 ]
 
-export default function Navbar() {
+export default function Navbar({ user, onLogout }: NavbarProps) {
   const [menuOpen, setMenuOpen] = useState(false)
 
   return (
@@ -41,8 +46,16 @@ export default function Navbar() {
               {label}
             </NavLink>
           ))}
-          <Link className="nav-cta" to="/#opportunities" onClick={() => setMenuOpen(false)}>
-            Find your next step <span aria-hidden="true">↗</span>
+          {user ? (
+            <div className="nav-account">
+              <span className="nav-user" title={user.email}><UserRound size={14} />{user.fullName || user.email}</span>
+              <button className="nav-logout" type="button" onClick={() => { onLogout(); setMenuOpen(false) }} aria-label="Log out"><LogOut size={15} /><span>Log out</span></button>
+            </div>
+          ) : (
+            <Link className="nav-login" to="/login" onClick={() => setMenuOpen(false)}><LogIn size={15} /> Log in</Link>
+          )}
+          <Link className="nav-cta" to="/events/new" onClick={() => setMenuOpen(false)}>
+            <Plus size={15} /> Add an event
           </Link>
         </nav>
       </div>
