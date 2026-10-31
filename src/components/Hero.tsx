@@ -1,4 +1,4 @@
-import { ArrowDown, ArrowRight, ArrowUpRight, Bookmark, LogIn, LogOut, Plus, Sparkles } from 'lucide-react'
+import { ArrowDown, ArrowRight, ArrowUpRight, Sparkles } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import SearchBar from './SearchBar'
 
@@ -6,10 +6,9 @@ interface HeroProps {
   search: string
   onSearchChange: (value: string) => void
   userName?: string
-  onLogout: () => void
 }
 
-export default function Hero({ search, onSearchChange, userName, onLogout }: HeroProps) {
+export default function Hero({ search, onSearchChange, userName }: HeroProps) {
   return (
     <section className="hero-shell">
       <div className="hero-inner">
@@ -19,12 +18,7 @@ export default function Hero({ search, onSearchChange, userName, onLogout }: Her
           <p>Find internships, scholarships, hackathons, and the people who can help you get there.</p>
           <div className="hero-actions">
             <Link to="/#opportunities" className="button button-lime">Explore opportunities <ArrowRight size={17} /></Link>
-            <Link to="/events/new" className="hero-text-link"><Plus size={16} /> Add an opportunity</Link>
             <a href="#opportunities" className="hero-text-link">See what’s out there <ArrowDown size={15} /></a>
-          </div>
-          <div className="hero-account-actions">
-            <Link to="/saved" state={{ intent: 'view-saved' }}><Bookmark size={15} /> Saved opportunities</Link>
-            {userName ? <button type="button" onClick={onLogout}><LogOut size={15} /> Log out</button> : <Link to="/login"><LogIn size={15} /> Log in</Link>}
           </div>
           <div className="hero-search-wrap">
             <SearchBar value={search} onChange={onSearchChange} variant="hero" />

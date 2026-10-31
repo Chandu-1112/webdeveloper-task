@@ -11,10 +11,9 @@ interface HomeProps {
   onToggleBookmark: (id: string) => void
   apiError: string
   userName?: string
-  onLogout: () => void
 }
 
-export default function Home({ opportunities, bookmarks, onToggleBookmark, apiError, userName, onLogout }: HomeProps) {
+export default function Home({ opportunities, bookmarks, onToggleBookmark, apiError, userName }: HomeProps) {
   const [search, setSearch] = useState('')
   const [category, setCategory] = useState<CategoryChoice>('All')
   const filteredOpportunities = useMemo(() => {
@@ -30,7 +29,7 @@ export default function Home({ opportunities, bookmarks, onToggleBookmark, apiEr
 
   return (
     <>
-      <Hero search={search} onSearchChange={setSearch} userName={userName} onLogout={onLogout} />
+      <Hero search={search} onSearchChange={setSearch} userName={userName} />
       <main id="opportunities" className="discovery-section">
         <div className="section-heading">
           <div><div className="eyebrow"><Sparkles size={13} /> THE OPPORTUNITY BOARD</div><h2>Find your kind of <span>next.</span></h2><p>Good things start with a first click. See what catches your eye.</p></div>

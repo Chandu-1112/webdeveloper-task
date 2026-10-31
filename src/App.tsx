@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import DownloadBanner from './components/DownloadBanner'
 import Footer from './components/Footer'
+import Navbar from './components/Navbar'
 import { opportunities as demoOpportunities } from './data/opportunities'
 import { useAuth } from './hooks/useAuth'
 import About from './pages/About'
@@ -112,8 +113,9 @@ export default function App() {
 
   return (
     <div className={`app${bannerVisible ? ' has-download-banner' : ''}`} id="top">
+      <Navbar user={user} onLogout={logout} />
       <Routes>
-        <Route path="/" element={<Home opportunities={opportunities} bookmarks={bookmarks} onToggleBookmark={toggleOpportunityBookmark} apiError={apiError} userName={user?.fullName || undefined} onLogout={logout} />} />
+        <Route path="/" element={<Home opportunities={opportunities} bookmarks={bookmarks} onToggleBookmark={toggleOpportunityBookmark} apiError={apiError} userName={user?.fullName || undefined} />} />
         <Route path="/saved" element={<SavedOpportunities opportunities={opportunities} bookmarks={bookmarks} isAuthenticated={Boolean(user)} loading={bookmarksLoading} onToggleBookmark={toggleOpportunityBookmark} />} />
         <Route path="/about" element={<About />} />
         <Route path="/login" element={<Login onLogin={login} onRegister={register} />} />
