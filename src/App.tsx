@@ -39,7 +39,8 @@ export default function App() {
 
   useEffect(() => {
     let active = true
-    void api.listEvents()
+    function loadPublicEvents() {
+      void api.listEvents()
       .then((events) => {
         if (active) {
           setApiEvents(events.map((event) => ({ ...event, isDemo: false })))
@@ -49,8 +50,21 @@ export default function App() {
       .catch((error: unknown) => {
         if (active) setApiError(error instanceof Error ? error.message : 'The API is unavailable.')
       })
-    return () => { active = false }
-  }, [])
+    }
+
+    function refreshWhenVisible() {
+      if (document.visibilityState === 'visible') loadPublicEvents()
+    }
+
+    loadPublicEvents()
+    window.addEventListener('focus', loadPublicEvents)
+    document.addEventListener('visibilitychange', refreshWhenVisible)
+    return () => {
+      active = false
+      window.removeEventListener('focus', loadPublicEvents)
+      document.removeEventListener('visibilitychange', refreshWhenVisible)
+    }
+  }, [location.pathname])
 
   useEffect(() => {
     if (!token) {
