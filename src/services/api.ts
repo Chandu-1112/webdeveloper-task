@@ -70,7 +70,7 @@ export const api = {
     return request<AuthUser>('/auth/me', {}, token)
   },
   listEvents() {
-    return request<Opportunity[]>('/events')
+    return request<Opportunity[]>('/events', { cache: 'no-store' })
   },
   listBookmarks(token: string) {
     return request<Opportunity[]>('/bookmarks', {}, token)

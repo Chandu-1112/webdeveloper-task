@@ -30,6 +30,7 @@ function readLegacyBookmarkIds(): string[] {
 export default function App() {
   const { token, user, loading: authLoading, login, register, logout } = useAuth()
   const [apiEvents, setApiEvents] = useState<Opportunity[]>([])
+  const [eventsLoading, setEventsLoading] = useState(true)
   const [serverBookmarks, setServerBookmarks] = useState<Opportunity[]>([])
   const [bookmarksLoading, setBookmarksLoading] = useState(false)
   const [apiError, setApiError] = useState('')
@@ -40,6 +41,7 @@ export default function App() {
   useEffect(() => {
     let active = true
     function loadPublicEvents() {
+      setEventsLoading(true)
       void api.listEvents()
       .then((events) => {
         if (active) {
@@ -49,6 +51,9 @@ export default function App() {
       })
       .catch((error: unknown) => {
         if (active) setApiError(error instanceof Error ? error.message : 'The API is unavailable.')
+      })
+      .finally(() => {
+        if (active) setEventsLoading(false)
       })
     }
 
@@ -144,7 +149,7 @@ export default function App() {
     <div className={`app${bannerVisible ? ' has-download-banner' : ''}`} id="top">
       <Navbar user={user} onLogout={logout} />
       <Routes>
-        <Route path="/" element={<Home opportunities={opportunities} bookmarks={bookmarks} onToggleBookmark={toggleOpportunityBookmark} apiError={apiError} userName={user?.fullName || undefined} />} />
+        <Route path="/" element={<Home opportunities={opportunities} bookmarks={bookmarks} onToggleBookmark={toggleOpportunityBookmark} apiError={apiError} eventsLoading={eventsLoading} userName={user?.fullName || undefined} />} />
         <Route path="/saved" element={<SavedOpportunities opportunities={opportunities} bookmarks={bookmarks} isAuthenticated={Boolean(user)} loading={bookmarksLoading} onToggleBookmark={toggleOpportunityBookmark} />} />
         <Route path="/events/manage" element={authLoading ? <main className="page-shell"><p role="status">Checking your account…</p></main> : user && token ? <ManageEvents token={token} onUpdate={updateOpportunity} onDelete={deleteOpportunity} /> : <Navigate to="/login" replace state={{ from: location.pathname, intent: 'manage-events' }} />} />
         <Route path="/about" element={<About />} />

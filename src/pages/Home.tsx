@@ -10,10 +10,11 @@ interface HomeProps {
   bookmarks: string[]
   onToggleBookmark: (id: string) => void
   apiError: string
+  eventsLoading: boolean
   userName?: string
 }
 
-export default function Home({ opportunities, bookmarks, onToggleBookmark, apiError, userName }: HomeProps) {
+export default function Home({ opportunities, bookmarks, onToggleBookmark, apiError, eventsLoading, userName }: HomeProps) {
   const [search, setSearch] = useState('')
   const [category, setCategory] = useState<CategoryChoice>('All')
   const filteredOpportunities = useMemo(() => {
@@ -40,6 +41,7 @@ export default function Home({ opportunities, bookmarks, onToggleBookmark, apiEr
           <CategoryFilter selected={category} onChange={setCategory} />
           {hasFilters && <button className="clear-filters" onClick={() => { setSearch(''); setCategory('All') }}>Clear filters <span>×</span></button>}
         </div>
+        {eventsLoading && <p className="api-status" role="status">Loading public community listings…</p>}
         {apiError && <p className="api-status" role="status">Community listings are temporarily unavailable. Demo opportunities are still shown. <span>{apiError}</span></p>}
         {filteredOpportunities.length > 0 ? (
           <div className="opportunity-grid grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
