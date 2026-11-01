@@ -60,6 +60,7 @@ The frontend and API are separate deployments: keep the frontend on Render, and 
 - `GET /auth/me` returns the authenticated user.
 - `GET /events` and `GET /events/{id}` list or retrieve events.
 - `POST /events` creates an event for the authenticated user. Required fields: `title`, `organization`, `category`, `description`, `fullDescription`, `eligibility`, `location`, `deadline`, and `instructions`. `skills` is optional.
+- `GET /events/mine` lists the authenticated user's own events. `PUT /events/{id}` edits an event and `DELETE /events/{id}` deletes it; both operations are limited to the event's creator.
 - `GET /bookmarks` lists the authenticated user's bookmarked events.
 - `PUT /events/{id}/bookmark` and `DELETE /events/{id}/bookmark` add or remove a bookmark. Both are idempotent.
 

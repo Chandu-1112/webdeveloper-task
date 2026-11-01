@@ -9,6 +9,7 @@ import About from './pages/About'
 import CreateOpportunity from './pages/CreateOpportunity'
 import Home from './pages/Home'
 import Login from './pages/Login'
+import ManageEvents from './pages/ManageEvents'
 import OpportunityDetails from './pages/OpportunityDetails'
 import SavedOpportunities from './pages/SavedOpportunities'
 import { api, type EventPayload } from './services/api'
@@ -111,12 +112,27 @@ export default function App() {
     return created
   }
 
+  async function updateOpportunity(id: string, payload: EventPayload) {
+    if (!token) throw new Error('Please log in to update an opportunity.')
+    const updated = { ...await api.updateEvent(id, payload, token), isDemo: false }
+    setApiEvents((current) => current.map((event) => event.id === id ? updated : event))
+    return updated
+  }
+
+  async function deleteOpportunity(id: string) {
+    if (!token) throw new Error('Please log in to delete an opportunity.')
+    await api.deleteEvent(id, token)
+    setApiEvents((current) => current.filter((event) => event.id !== id))
+    setServerBookmarks((current) => current.filter((event) => event.id !== id))
+  }
+
   return (
     <div className={`app${bannerVisible ? ' has-download-banner' : ''}`} id="top">
       <Navbar user={user} onLogout={logout} />
       <Routes>
         <Route path="/" element={<Home opportunities={opportunities} bookmarks={bookmarks} onToggleBookmark={toggleOpportunityBookmark} apiError={apiError} userName={user?.fullName || undefined} />} />
         <Route path="/saved" element={<SavedOpportunities opportunities={opportunities} bookmarks={bookmarks} isAuthenticated={Boolean(user)} loading={bookmarksLoading} onToggleBookmark={toggleOpportunityBookmark} />} />
+        <Route path="/events/manage" element={authLoading ? <main className="page-shell"><p role="status">Checking your account…</p></main> : user && token ? <ManageEvents token={token} onUpdate={updateOpportunity} onDelete={deleteOpportunity} /> : <Navigate to="/login" replace state={{ from: location.pathname, intent: 'manage-events' }} />} />
         <Route path="/about" element={<About />} />
         <Route path="/login" element={<Login onLogin={login} onRegister={register} />} />
         <Route path="/events/new" element={authLoading ? <main className="page-shell"><p role="status">Checking your account…</p></main> : user ? <CreateOpportunity onCreate={createOpportunity} /> : <Navigate to="/login" replace state={{ from: location.pathname, intent: 'add-event' }} />} />

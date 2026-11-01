@@ -1,11 +1,13 @@
 import { useState, type FormEvent } from 'react'
 import { ArrowLeft, ArrowUpRight, Plus } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
-import type { OpportunityCategory } from '../types/opportunity'
+import type { Opportunity, OpportunityCategory } from '../types/opportunity'
 import type { EventPayload } from '../services/api'
 
 interface CreateOpportunityProps {
   onCreate: (payload: EventPayload) => Promise<{ id: string }>
+  opportunity?: Opportunity
+  onUpdate?: (payload: EventPayload) => Promise<void>
 }
 
 const categories: OpportunityCategory[] = ['Internship', 'Hackathon', 'Scholarship', 'Workshop', 'Competition']
@@ -14,7 +16,7 @@ function lines(value: FormDataEntryValue | null) {
   return String(value ?? '').split('\n').map((item) => item.trim()).filter(Boolean)
 }
 
-export default function CreateOpportunity({ onCreate }: CreateOpportunityProps) {
+export default function CreateOpportunity({ onCreate, opportunity, onUpdate }: CreateOpportunityProps) {
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
   const navigate = useNavigate()
@@ -38,8 +40,13 @@ export default function CreateOpportunity({ onCreate }: CreateOpportunityProps) 
     setBusy(true)
     setError('')
     try {
-      const opportunity = await onCreate(payload)
-      navigate(`/opportunities/${opportunity.id}`)
+      if (opportunity && onUpdate) {
+        await onUpdate(payload)
+        navigate('/events/manage')
+      } else {
+        const created = await onCreate(payload)
+        navigate(`/opportunities/${created.id}`)
+      }
     } catch (reason) {
       setError(reason instanceof Error ? reason.message : 'Unable to add this opportunity.')
     } finally {
@@ -50,27 +57,27 @@ export default function CreateOpportunity({ onCreate }: CreateOpportunityProps) 
   return (
     <main className="form-page create-page">
       <section className="create-shell">
-        <Link className="back-link" to="/"><ArrowLeft size={16} /> Back to opportunities</Link>
+        <Link className="back-link" to={opportunity ? '/events/manage' : '/'}><ArrowLeft size={16} /> {opportunity ? 'Back to managed events' : 'Back to opportunities'}</Link>
         <div className="form-intro create-intro">
-          <div className="eyebrow"><Plus size={13} /> COMMUNITY LISTING</div>
-          <h1>Put a good opportunity on the map.</h1>
-          <p>Share the details students need to decide whether it’s right for them.</p>
+        <div className="eyebrow"><Plus size={13} /> {opportunity ? 'EDIT LISTING' : 'COMMUNITY LISTING'}</div>
+        <h1>{opportunity ? 'Keep your opportunity up to date.' : 'Put a good opportunity on the map.'}</h1>
+        <p>{opportunity ? 'Update the details students see on your public listing.' : 'Share the details students need to decide whether it’s right for them.'}</p>
         </div>
         <form className="event-form" onSubmit={submit}>
           <div className="form-grid">
-            <label className="form-field"><span>Opportunity title</span><input name="title" required minLength={3} maxLength={200} placeholder="e.g. Summer Research Internship" /></label>
-            <label className="form-field"><span>Organization</span><input name="organization" required minLength={2} maxLength={200} placeholder="Who is hosting it?" /></label>
-            <label className="form-field"><span>Category</span><select name="category" required defaultValue="Internship">{categories.map((category) => <option key={category}>{category}</option>)}</select></label>
-            <label className="form-field"><span>Location</span><input name="location" required minLength={2} maxLength={200} placeholder="Remote, city, or hybrid" /></label>
-            <label className="form-field"><span>Application deadline</span><input name="deadline" type="date" required /></label>
-            <label className="form-field form-field-wide"><span>Short description</span><textarea name="description" required minLength={10} maxLength={500} rows={2} placeholder="A concise summary for the opportunity card" /></label>
-            <label className="form-field form-field-wide"><span>Full description</span><textarea name="fullDescription" required minLength={20} rows={4} placeholder="What will participants do, learn, or receive?" /></label>
-            <label className="form-field form-field-wide"><span>Eligibility</span><textarea name="eligibility" required rows={3} placeholder={'One requirement per line\nFor example: Current college students'} /></label>
-            <label className="form-field form-field-wide"><span>Application instructions</span><textarea name="instructions" required minLength={10} rows={3} placeholder="How should interested students apply?" /></label>
-            <label className="form-field form-field-wide"><span>Skills (optional)</span><textarea name="skills" rows={2} placeholder={'One skill per line\nFor example: User research'} /></label>
+          <label className="form-field"><span>Opportunity title</span><input name="title" required minLength={3} maxLength={200} placeholder="e.g. Summer Research Internship" defaultValue={opportunity?.title} /></label>
+          <label className="form-field"><span>Organization</span><input name="organization" required minLength={2} maxLength={200} placeholder="Who is hosting it?" defaultValue={opportunity?.organization} /></label>
+          <label className="form-field"><span>Category</span><select name="category" required defaultValue={opportunity?.category ?? 'Internship'}>{categories.map((category) => <option key={category}>{category}</option>)}</select></label>
+          <label className="form-field"><span>Location</span><input name="location" required minLength={2} maxLength={200} placeholder="Remote, city, or hybrid" defaultValue={opportunity?.location} /></label>
+          <label className="form-field"><span>Application deadline</span><input name="deadline" type="date" required defaultValue={opportunity?.deadline} /></label>
+          <label className="form-field form-field-wide"><span>Short description</span><textarea name="description" required minLength={10} maxLength={500} rows={2} placeholder="A concise summary for the opportunity card" defaultValue={opportunity?.description} /></label>
+          <label className="form-field form-field-wide"><span>Full description</span><textarea name="fullDescription" required minLength={20} rows={4} placeholder="What will participants do, learn, or receive?" defaultValue={opportunity?.fullDescription} /></label>
+          <label className="form-field form-field-wide"><span>Eligibility</span><textarea name="eligibility" required rows={3} placeholder={'One requirement per line\nFor example: Current college students'} defaultValue={opportunity?.eligibility.join('\n')} /></label>
+          <label className="form-field form-field-wide"><span>Application instructions</span><textarea name="instructions" required minLength={10} rows={3} placeholder="How should interested students apply?" defaultValue={opportunity?.instructions} /></label>
+          <label className="form-field form-field-wide"><span>Skills (optional)</span><textarea name="skills" rows={2} placeholder={'One skill per line\nFor example: User research'} defaultValue={opportunity?.skills?.join('\n')} /></label>
           </div>
           {error && <p className="form-error" role="alert">{error}</p>}
-          <div className="event-form-footer"><p>Listings are associated with your account. Please share accurate, current information.</p><button className="button button-dark" type="submit" disabled={busy}>{busy ? 'Publishing…' : 'Publish opportunity'} {!busy && <ArrowUpRight size={16} />}</button></div>
+        <div className="event-form-footer"><p>Listings are associated with your account. Please share accurate, current information.</p><button className="button button-dark" type="submit" disabled={busy}>{busy ? (opportunity ? 'Saving…' : 'Publishing…') : (opportunity ? 'Save changes' : 'Publish opportunity')} {!busy && <ArrowUpRight size={16} />}</button></div>
         </form>
       </section>
     </main>

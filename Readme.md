@@ -11,12 +11,14 @@ The goal is to make finding useful career and learning opportunities easier for 
 ## Features
 
 - View different opportunities with their details.
+- Browse community event listings without signing in.
 - Search opportunities by title or organization name.
 - Filter opportunities by category.
 - View detailed information about each opportunity.
 - Create an account and log in.
 - Save sample and community opportunities to your account database.
 - Publish opportunities with eligibility, location, deadline, skills, and application instructions.
+- Manage your published opportunities by editing or deleting them, and copy a public link to share each listing.
 - Responsive design for mobile and desktop.
 - Installable as a web app on supported browsers.
 
@@ -131,5 +133,5 @@ Github copilot for coding and debugging.
 
 ## Further Improvements
 
-- Add moderation and event ownership management.
+- Add community listing moderation.
 - Add deadline reminders and opportunity recommendations.

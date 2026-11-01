@@ -196,6 +196,18 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
 .saved-count { margin: 0 0 13px; color: #738187; font-size: 10px; font-weight: 600; }
 .saved-empty { min-height: 335px; }
 .saved-empty .button { margin-top: 2px; }
+.managed-events { display: grid; gap: 13px; }
+.managed-event { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 21px; background: white; border: 1px solid #e3e8df; border-radius: 6px; }
+.managed-event-info { min-width: 0; }
+.managed-event-info .card-organization { margin-top: 12px; }
+.managed-event-info h2 { margin: 0 0 6px; color: var(--ink); font-family: var(--display); font-size: 18px; font-weight: 600; }
+.managed-event-info > p:last-child { max-width: 620px; margin: 0; color: #718087; font-size: 11px; line-height: 1.65; }
+.managed-event-actions { display: flex; flex: 0 0 auto; flex-wrap: wrap; justify-content: flex-end; gap: 7px; }
+.manage-action { min-height: 36px; display: inline-flex; align-items: center; justify-content: center; gap: 7px; padding: 0 10px; color: #586a70; background: white; border: 1px solid #dfe5dd; border-radius: 4px; font-size: 10px; font-weight: 600; cursor: pointer; }
+.manage-action:hover { color: var(--navy); background: #f6f8f2; }
+.manage-action:disabled { opacity: .6; cursor: wait; }
+.manage-delete { color: #a64e3c; }
+.manage-error { margin: 0 0 16px; }
 
 .form-page { min-height: calc(100vh - 166px); padding: 60px 32px 72px; background: linear-gradient(135deg, #f7f8f4 0%, #edf1e8 100%); }
 .form-shell { width: min(940px, 100%); min-height: 510px; display: grid; grid-template-columns: .92fr 1.08fr; margin: auto; background: white; border: 1px solid #e3e8df; border-radius: 6px; box-shadow: 0 15px 44px rgba(23,45,58,.07); animation: rise-in .4s both ease-out; }
@@ -412,6 +424,9 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
   .banner-close { position: absolute; top: 12px; right: 12px; margin: 0; }
   .page-shell { min-height: calc(100vh - 190px); padding-top: 45px; }
   .page-heading h1 { font-size: 35px; }
+  .managed-event { align-items: stretch; flex-direction: column; gap: 16px; padding: 16px; }
+  .managed-event-actions { justify-content: flex-start; }
+  .manage-action { flex: 1 1 calc(50% - 7px); }
   .saved-empty { min-height: 290px; }
   .form-page { min-height: calc(100vh - 190px); padding: 30px 18px 45px; }
   .form-shell { grid-template-columns: 1fr; }

@@ -77,6 +77,17 @@ def list_events(db: DatabaseSession) -> list[Event]:
     )
 
 
+@app.get("/events/mine", response_model=list[EventRead])
+def list_my_events(user: CurrentUser, db: DatabaseSession) -> list[Event]:
+    return list(
+        db.scalars(
+            select(Event)
+            .where(Event.created_by_id == user.id, Event.is_demo.is_(False))
+            .order_by(Event.created_at.desc())
+        ).all()
+    )
+
+
 @app.get("/events/{event_id}", response_model=EventRead)
 def get_event(event_id: str, db: DatabaseSession) -> Event:
     event = db.get(Event, event_id)
@@ -92,6 +103,28 @@ def create_event(payload: EventCreate, user: CurrentUser, db: DatabaseSession) -
     db.commit()
     db.refresh(event)
     return event
+
+
+@app.put("/events/{event_id}", response_model=EventRead)
+def update_event(event_id: str, payload: EventCreate, user: CurrentUser, db: DatabaseSession) -> Event:
+    event = db.get(Event, event_id)
+    if event is None or event.created_by_id != user.id or event.is_demo:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Event not found")
+    for field, value in payload.model_dump().items():
+        setattr(event, field, value)
+    db.commit()
+    db.refresh(event)
+    return event
+
+
+@app.delete("/events/{event_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_event(event_id: str, user: CurrentUser, db: DatabaseSession) -> Response:
+    event = db.get(Event, event_id)
+    if event is None or event.created_by_id != user.id or event.is_demo:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Event not found")
+    db.delete(event)
+    db.commit()
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
 @app.get("/bookmarks", response_model=list[EventRead])

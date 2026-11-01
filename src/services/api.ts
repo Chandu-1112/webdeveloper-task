@@ -91,4 +91,16 @@ export const api = {
       body: JSON.stringify(payload),
     }, token)
   },
+  listMyEvents(token: string) {
+    return request<Opportunity[]>('/events/mine', {}, token)
+  },
+  updateEvent(id: string, payload: EventPayload, token: string) {
+    return request<Opportunity>(`/events/${encodeURIComponent(id)}`, {
+      method: 'PUT',
+      body: JSON.stringify(payload),
+    }, token)
+  },
+  deleteEvent(id: string, token: string) {
+    return request<void>(`/events/${encodeURIComponent(id)}`, { method: 'DELETE' }, token)
+  },
 }

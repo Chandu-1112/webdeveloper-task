@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
-import { Bookmark, Compass, House, LogIn, LogOut, Menu, Plus, UserRound, X } from 'lucide-react'
+import { Bookmark, Compass, House, ListTodo, LogIn, LogOut, Menu, Plus, UserRound, X } from 'lucide-react'
 
 interface NavbarProps {
   user: { email: string; fullName: string } | null
@@ -46,6 +46,16 @@ export default function Navbar({ user, onLogout }: NavbarProps) {
               {label}
             </NavLink>
           ))}
+          {user && (
+            <NavLink
+              to="/events/manage"
+              className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}
+              onClick={() => setMenuOpen(false)}
+            >
+              <ListTodo size={16} strokeWidth={1.9} />
+              Manage events
+            </NavLink>
+          )}
           {user ? (
             <div className="nav-account">
               <span className="nav-user" title={user.email}><UserRound size={14} />{user.fullName || user.email}</span>
